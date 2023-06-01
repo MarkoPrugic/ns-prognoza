@@ -2,6 +2,10 @@
 
 Web aplikacija u React-u za prikaz trenutnih meteoroloskih uslova u Novom Sadu.
 
+## Screenshot
+
+![App Screenshot](https://github.com/MarkoPrugic/ns-prognoza/blob/master/ss.png?raw=true)
+
 ## Lokalno pokretanje
 
 Clone the project
@@ -27,9 +31,4 @@ Start the server
 ```bash
   npm run start
 ```
-
-
-## Screenshots
-
-![App Screenshot](https://github.com/MarkoPrugic/ns-prognoza/blob/master/ss.png?raw=true)
 
