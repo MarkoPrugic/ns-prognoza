@@ -25,6 +25,6 @@ export const weatherStatusMap = {
     85:   { status: 'Snežni pljuskovi - Blag intenzitet',         image: '/res/extreme-snow.svg' },
     86:   { status: 'Snežni pljuskovi - Jak intenzitet',          image: '/res/extreme-snow.svg' },
     95:   { status: 'Grmljavina',                                 image: '/res/thunderstorms.svg' },
-    96:   { status: 'Grmljavina',                                 image: '/res/thunderstorms.svg' },
-    99:   { status: 'Grmljavina',                                 image: '/res/thunderstorms.svg' },
+    96:   { status: 'Grmljavina',                                 image: '/res/thunderstorms-extreme.svg' },
+    99:   { status: 'Grmljavina',                                 image: '/res/thunderstorms-extreme.svg' },
   };
