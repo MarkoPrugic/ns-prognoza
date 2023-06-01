@@ -18,6 +18,10 @@ body {
     border-radius: 8px;
 }
 
+.card-inner:not(#tooltip) {
+    animation: puff-in-center 0.7s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
+}
+
 .circle {
     position: absolute;
     animation: move-up6 2s ease-in infinite alternate-reverse;
@@ -43,5 +47,19 @@ body {
 @keyframes move-down1 {
     to {
         transform: translateY(15px);
+    }
+}
+
+@keyframes puff-in-center {
+    0% {
+        transform: scale(2);
+        filter: blur(4px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        filter: blur(0px);
+        opacity: 1;
     }
 }

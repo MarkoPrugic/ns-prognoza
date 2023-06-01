@@ -13,7 +13,7 @@ const CustomTooltip = ({ active, payload, label }) => {
     const temperature = data.value;
     const weatherStatus = data.payload.weather;
     return (
-      <Box className="card-inner" sx={{
+      <Box className="card-inner" id='tooltip' sx={{
         mx: 10,
         mt: 16,
         '& > :not(style)': { m: 4, width: '100%' },
