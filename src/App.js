@@ -5,31 +5,38 @@ import WeatherChart from './components/WeatherChart';
 import { weatherStatusMap } from './components/WeatherStatusMap';
 
 function App() {
+  // Definišanje početnog stanja koristeći useState
   const [weatherData, setWeatherData] = useState({
     temperature: 0,
     image: '',
     weatherStatus: '',
     forecast: []
   });
-
+  // Učitavanje vremenskih podataka pri montiranju komponente
   useEffect(() => {
     getWeather();
   }, []);
 
+// Funkcija za dobijanje vremenskih podataka putem API-ja
 const getWeather = async () => {
     try {
+      // Slanje zahteva za dobijanje vremenskih podataka
       const response = await fetch(process.env.REACT_APP_API_URL);
       const jsonData = await response.json();
 
+      // Dobijanje trenutnog vremenskog koda i odgovarajućeg statusa i slike
       const { weathercode } = jsonData.current_weather;
       const { status, image } = weatherStatusMap[weathercode];
 
+      // Izdvajanje vremenskih podataka za prognozu
       const forecastTime = jsonData.hourly.time.slice(24, 72);
       const forecastTemperature = jsonData.hourly.temperature_2m.slice(24, 72);
       const forecastWeatherCode = jsonData.hourly.weathercode.slice(24, 72);
 
+      // Dobijanje statusa vremena za prognozu na osnovu vremenskog koda
       const forecastWeather = forecastWeatherCode.map(code => weatherStatusMap[code].status);
 
+      // Formiranje podataka za prikaz na grafikonu
       const forecastData = forecastTime.map((time, index) => ({
         id: Math.random(),
         time,
@@ -37,6 +44,7 @@ const getWeather = async () => {
         weather: forecastWeather[index],
       }));
 
+      // Postavljanje vremenskih podataka u stanje
       setWeatherData({
         temperature: Math.round(jsonData.current_weather.temperature),
         image,
@@ -48,6 +56,7 @@ const getWeather = async () => {
     }
   };
   
+  // Destrukturiranje vremenskih podataka iz stanja
   const { temperature, image, weatherStatus, forecast } = weatherData;
 
   return (

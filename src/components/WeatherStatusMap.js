@@ -28,4 +28,3 @@ export const weatherStatusMap = {
     96:   { status: 'Grmljavina',                                 image: '/res/thunderstorms.svg' },
     99:   { status: 'Grmljavina',                                 image: '/res/thunderstorms.svg' },
   };
-  

@@ -4,12 +4,12 @@ import 'moment/locale/sr';
 import { Box, Typography } from '@mui/material';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
 
-moment.locale('sr');
+moment.locale('sr'); // Postavljanje lokalizacije na srpski jezik za biblioteku moment.js
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     const [data] = payload;
-    const formattedLabel = moment(label).calendar();
+    const formattedLabel = moment(label).calendar(); // Formatiranje oznake datuma koristeći moment.js
     const temperature = data.value;
     const weatherStatus = data.payload.weather;
     return (
@@ -22,11 +22,11 @@ const CustomTooltip = ({ active, payload, label }) => {
       }}>
         <Box sx={{}}>
           <Typography>
-            {formattedLabel.charAt(0).toUpperCase() + formattedLabel.slice(1)}
+            {formattedLabel.charAt(0).toUpperCase() + formattedLabel.slice(1)} {/* Prikazivanje formatirane oznake datuma */}
           </Typography>
           <br />
           <Typography variant='body2'>
-            {`${temperature} °C ${weatherStatus}`}
+            {`${temperature} °C ${weatherStatus}`} {/* Prikazivanje temperature i statusa vremena */}
           </Typography>
         </Box>
       </Box>
@@ -36,12 +36,12 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const formatXAxis = (forecastData) => {
-  const formattedLabel = moment(forecastData).calendar();
+  const formattedLabel = moment(forecastData).calendar(); // Formatiranje oznake datuma za osu X koristeći moment.js
   return formattedLabel.charAt(0).toUpperCase() + formattedLabel.slice(1);
 };
 
 const formatYAxis = (forecastData) => {
-  return forecastData + ' °C';
+  return forecastData + ' °C'; // Formatiranje oznake temperature za osu Y
 };
 
 const WeatherChart = ({ forecast }) => (
