@@ -1,6 +1,10 @@
 # NS Prognoza
 
-Web aplikacija u React-u za prikaz trenutnih meteoroloskih uslova u Novom Sadu.
+- Web aplikacija u React-u za prikaz trenutnih meteoroloskih uslova u Novom Sadu.
+- Opis vremenskih uslova sa animiranim ilustracijama
+- Prognoza za naredna 3 dana prikazana grafikonom.
+- Prognoza za svaki sat.
+
 
 ## Screenshot
 
