@@ -1,90 +1,105 @@
 import './App.css';
-import { useState } from 'react';
-import Weather from './Weather';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-
+import React, { useState, useEffect } from 'react';
+import { Box, Typography } from '@mui/material';
+import WeatherChart from './components/WeatherChart';
 
 function App() {
-  const [temperature, setTemperature] = useState(0);
-  const [image, setImage] = useState('');
-  const [weatherStatus, setWeatherStatus] = useState('');
+  const [temperature, setTemperature] = useState(0); // Trenutna temperatura
+  const [image, setImage] = useState(''); // Slika za prikaz vremenskih uslova
+  const [weatherStatus, setWeatherStatus] = useState(''); // Status vremena
+  const [forecast, setForecast] = useState([]); // Prognoza vremena
+
+  useEffect(() => {
+    GetWeather();
+  }, []);
 
   const GetWeather = async () => {
-    const data = await Weather();
-    setTemperature(Math.round(data.current_weather.temperature));
-    switch (data.current_weather.weathercode) {
-      case 0:
-        setWeatherStatus('Vedro');
-        setImage('/res/sunny.png');
-        break;
-      case 1 || 2 || 3:
-        setWeatherStatus('Oblacno');
-        setImage('');
-        break;
-      case 45 || 48:
-        setWeatherStatus('Maglovito');
-        setImage('');
-        break;
-      case 51 || 53 || 55 || 56 || 57:
-        setWeatherStatus('Sitna kisa');
-        setImage('');
-        break;
-      case 61 || 63 || 65:
-        setWeatherStatus('Kisa');
-        setImage('');
-        break;
-      case 66 || 67:
-        setWeatherStatus('Ledena kisa');
-        setImage('');
-        break;
-      case 71 || 73 || 75 || 77:
-        setWeatherStatus('Sneg');
-        setImage('');
-        break;
-      case 80 || 81 || 82:
-        setWeatherStatus('Pljusak');
-        setImage('');
-        break;
-      case 95 || 96 || 99:
-        setWeatherStatus('Grmljavina');
-        setImage('/res/thunderstorm.png');
-        break;
+    try {
+      const response = await fetch(process.env.REACT_APP_API_URL); // Uzimanje podataka o vremenu sa API-ja
+      const jsonData = await response.json(); // Parsiranje odgovora u JSON format
+      setTemperature(Math.round(jsonData.current_weather.temperature)); // Postavljanje trenutne temperature
+      
+      // Mapiranje vremenskih kodova na odgovarajući status i sliku
+      const weatherStatusMap = {
+        0:    { status: 'Čisto nebo',                                 image: '/res/sunny.svg' },
+        1:    { status: 'Uglavnom čisto',                             image: '/res/cloudy.svg' },
+        2:    { status: 'Delimično oblačno',                          image: '/res/cloudy.svg' },
+        3:    { status: 'Oblačno',                                    image: '/res/cloudy.svg' },
+        45:   { status: 'Maglovito',                                  image: '/res/fog.svg' },
+        48:   { status: 'Maglovito',                                  image: '/res/fog.svg' },
+        51:   { status: 'Sitna kisa',                                 image: '/res/drizzle.svg' },
+        53:   { status: 'Sitna kisa',                                 image: '/res/drizzle.svg' },
+        55:   { status: 'Sitna kisa',                                 image: '/res/drizzle.svg' },
+        56:   { status: 'Sitna kisa',                                 image: '/res/drizzle.svg' },
+        57:   { status: 'Sitna kisa',                                 image: '/res/drizzle.svg' },
+        61:   { status: 'Kisa - Blag intenzitet',                     image: '/res/rain.svg' },
+        63:   { status: 'Kisa - Umeren intenzitet',                   image: '/res/rain.svg' },
+        65:   { status: 'Kisa - Jak intenzitet',                      image: '/res/extreme-rain.svg' },
+        66:   { status: 'Ledena kisa - Lagan intenzitet',             image: '/res/sleet.svg' },
+        67:   { status: 'Ledena kisa - Jak intenzitet',               image: '/res/sleet.svg' },
+        71:   { status: 'Sneg',                                       image: '/res/snow.svg' },
+        73:   { status: 'Sneg',                                       image: '/res/snow.svg' },
+        75:   { status: 'Sneg',                                       image: '/res/snow.svg' },
+        77:   { status: 'Sneg',                                       image: '/res/snow.svg' },
+        80:   { status: 'Kišni pljuskovi - Blag intenzitet',          image: '/res/extreme-rain.svg' },
+        81:   { status: 'Kišni pljuskovi - Umeren intenzitet',        image: '/res/extreme-rain.svg' },
+        82:   { status: 'Kišni pljuskovi - Jak intenzitet',           image: '/res/extreme-rain.svg' },
+        85:   { status: 'Snežni pljuskovi - Blag intenzitet',         image: '/res/extreme-snow.svg' },
+        86:   { status: 'Snežni pljuskovi - Jak intenzitet',          image: '/res/extreme-snow.svg' },
+        95:   { status: 'Grmljavina',                                 image: '/res/thunderstorms.svg' },
+        96:   { status: 'Grmljavina',                                 image: '/res/thunderstorms.svg' },
+        99:   { status: 'Grmljavina',                                 image: '/res/thunderstorms.svg' },
+      };
+
+      // Dobijanje statusa i slike na osnovu trenutnog vremenskog koda
+      const { status, image } = weatherStatusMap[jsonData.current_weather.weathercode];
+      setWeatherStatus(status);
+      setImage(image);
+
+      // Izdvajanje podataka za prognozu iz dobijenih podataka
+      const forecastTime = jsonData.hourly.time.slice(24, 72);
+      const forecastTemperature = jsonData.hourly.temperature_2m.slice(24, 72);
+      const forecastWeatherCode = jsonData.hourly.weathercode.slice(24, 72);
+
+      // Mapiranje vremenskih kodova prognoze na odgovarajući status
+      const forecastWeather = forecastWeatherCode.map(code => weatherStatusMap[code].status);
+
+      // Kreiranje objekata sa podacima za prikaz na grafikonu
+      const forecastData = forecastTime.map((time, index) => ({
+        id: Math.random(),
+        time,
+        temp: forecastTemperature[index],
+        weather: forecastWeather[index],
+      }));
+
+      setForecast(forecastData); // Postavljanje podataka za prognozu
     }
-    console.log(data.current_weather);
-  }
-  GetWeather();
+    catch (error) {
+      console.error('greska: ', error); // Prikazivanje greške u konzoli
+    }
+  };
 
   return (
     <div className="App">
-      <Card sx={{ position: 'relative', mx: 10, mt: 16, background: 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(255,255,255,1) 75%)' }} elevation={0}>
-        <CardMedia sx={{
-          mx:2,
-          float:'right',
-          width:'24rem'
-        }}
-          component="img"
-          alt="Weather ilustration"
-          src={image}
-        />
-        <CardContent sx={{ backgroundColor: 'white' }}>
-          <Typography gutterBottom variant="h5" component="div">
-            Trenutna temperatura: {temperature} °C
-          </Typography>
-          <Typography variant="h6" color="text.secondary">
-            {weatherStatus}
-          </Typography>
-        </CardContent>
-      </Card>
+      <Box className="container">
+        <div className="circle"><img alt='Ilustracija' src={image} style={{ height: '350px', width: '350px' }} /></div>
+        <div className="circle"><img alt='Ilustracija' src={image} style={{ height: '350px', width: '350px' }} /></div>
+        <Box className="card-inner" sx={{ background: 'rgba(143, 143, 143, 0.1)', '& > :not(style)': { m: 0, width: '100%' }, mx: 10, mt: 10, flexWrap: 'wrap' }}>
+          <Box className="card-inner" sx={{ background: 'rgba(43, 45, 66, 0.1)', '& > :not(style)': { m: 4, width: '100%' }, alignItems: 'center', boxShadow: '0 0 15px rgba(43, 45, 66, 0.3)', }}>
+            <Box>
+              <Typography variant="h2">
+                Trenutna temperatura: {temperature} °C
+              </Typography>
+              <br />
+              <Typography variant="h4">
+                {weatherStatus}
+              </Typography>
+            </Box>
+            <img alt='Glavna ilustracija' src={image} style={{ height: '300px', width: '300px', background: 'radial-gradient(ellipse, rgba(0,0,0,0.5) 0%, rgba(255,255,255,0) 50%)' }} />
+          </Box>
+          <WeatherChart forecast={forecast} />
+        </Box>
+      </Box>
     </div>
   );
 }

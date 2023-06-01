@@ -1,3 +1,47 @@
-body{
-    background: #444;
+body {
+    background: linear-gradient(112.6deg, rgb(56, 24, 40) -10.7%, rgb(23, 148, 185) 100%) no-repeat fixed;
+    overflow: hidden;
+    color: rgb(237, 242, 244);
+}
+
+.container {
+    transition: all 0.2s;
+    position: relative;
+}
+
+.card-inner {
+    display: flex;
+    flex-wrap: nowrap;
+    width: inherit;
+    height: inherit;
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+}
+
+.circle {
+    position: absolute;
+    animation: move-up6 2s ease-in infinite alternate-reverse;
+}
+
+.circle:nth-child(1) {
+    top: -150px;
+    left: -25px;
+}
+
+.circle:nth-child(2) {
+    bottom: 100px;
+    right: -30px;
+    animation: move-down1 2s ease-in infinite alternate-reverse;
+}
+
+@keyframes move-up6 {
+    to {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes move-down1 {
+    to {
+        transform: translateY(15px);
+    }
 }
