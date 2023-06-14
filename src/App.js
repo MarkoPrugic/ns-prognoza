@@ -17,8 +17,8 @@ function App() {
     getWeather();
   }, []);
 
-// Funkcija za dobijanje vremenskih podataka putem API-ja
-const getWeather = async () => {
+  // Funkcija za dobijanje vremenskih podataka putem API-ja
+  const getWeather = async () => {
     try {
       // Slanje zahteva za dobijanje vremenskih podataka
       const response = await fetch(process.env.REACT_APP_API_URL);
@@ -55,7 +55,7 @@ const getWeather = async () => {
       console.error('Error: ', error);
     }
   };
-  
+
   // Destrukturiranje vremenskih podataka iz stanja
   const { temperature, image, weatherStatus, forecast } = weatherData;
 
