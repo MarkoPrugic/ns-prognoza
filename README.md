@@ -5,8 +5,6 @@
 - Prognoza za naredna 3 dana prikazana grafikonom.
 - Prognoza za svaki sat.
 
-## Live
-https://ns-prognoza.netlify.app/
 
 ## Screenshot
 
